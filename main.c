@@ -1,4 +1,5 @@
 // main.c
+// Modifier le fsm et remplacer par aef (automate d'état finis)
 #include <stdio.h>
 #include "fsm.h"
 
