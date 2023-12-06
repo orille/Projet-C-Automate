@@ -1,122 +1,161 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+#define MAX_ETATS 100
+#define MAX_SYMBOLES 256  // Nombre maximum de symboles (caractères ASCII)
 
 typedef struct {
-    int numberOfStates;
-    int numberOfSymbols;
-    int **transitionMatrix;
-} FiniteStateMachine;
+    int nombreEtats;
+    int nombreSymboles;
+    int **matriceTransition;
+} AutomateEtatsFinis;
 
-FiniteStateMachine *createFSM(int states, int symbols) {
-    FiniteStateMachine *fsm = malloc(sizeof(FiniteStateMachine));
-    fsm->numberOfStates = states;
-    fsm->numberOfSymbols = symbols;
-    fsm->transitionMatrix = malloc(states * sizeof(int *));
-    for (int i = 0; i < states; i++) {
-        fsm->transitionMatrix[i] = malloc(symbols * sizeof(int));
-        for (int j = 0; j < symbols; j++) {
-            fsm->transitionMatrix[i][j] = -1;
+// Créer un nouvel AEF
+AutomateEtatsFinis *creerAEF(int etats, int symboles) {
+    AutomateEtatsFinis *aef = malloc(sizeof(AutomateEtatsFinis));
+    aef->nombreEtats = etats;
+    aef->nombreSymboles = symboles;
+    aef->matriceTransition = malloc(etats * sizeof(int *));
+    for (int i = 0; i < etats; i++) {
+        aef->matriceTransition[i] = malloc(symboles * sizeof(int));
+        for (int j = 0; j < symboles; j++) {
+            aef->matriceTransition[i][j] = -1; // -1 indique qu'il n'y a pas de transition
         }
     }
-    return fsm;
+    return aef;
 }
 
-void inputFSM(FiniteStateMachine *fsm) {
+// Saisir les transitions de l'AEF
+void saisirTransitionsAEF(AutomateEtatsFinis *aef) {
     printf("Entrer les transitions pour chaque état et symbole :\n");
-    for (int i = 0; i < fsm->numberOfStates; i++) {
-        for (int j = 0; j < fsm->numberOfSymbols; j++) {
-            printf("Transition de l'état %d avec le symbole %d: ", i, j);
-            scanf("%d", &fsm->transitionMatrix[i][j]);
+    for (int i = 0; i < aef->nombreEtats; i++) {
+        for (int j = 0; j < aef->nombreSymboles; j++) {
+            printf("Transition de l'état %d avec le symbole '%c' : ", i, j);
+            int etatSuivant;
+            scanf("%d", &etatSuivant);
+            aef->matriceTransition[i][j] = etatSuivant;
         }
     }
 }
 
-void printFSM(FiniteStateMachine *fsm) {
-    printf("Matrice de transition de la FSM :\n");
-    for (int i = 0; i < fsm->numberOfStates; i++) {
-        for (int j = 0; j < fsm->numberOfSymbols; j++) {
-            printf("%d ", fsm->transitionMatrix[i][j]);
+// Afficher la matrice de transition de l'AEF
+void afficherAEF(AutomateEtatsFinis *aef) {
+    printf("Matrice de transition de l'AEF :\n");
+    for (int i = 0; i < aef->nombreEtats; i++) {
+        for (int j = 0; j < aef->nombreSymboles; j++) {
+            printf("%d ", aef->matriceTransition[i][j]);
         }
         printf("\n");
     }
 }
 
-void saveFSMToFile(FiniteStateMachine *fsm, const char *filename) {
-    FILE *file = fopen(filename, "w");
-    if (file == NULL) {
+// Enregistrer l'AEF dans un fichier
+void sauvegarderAEF(AutomateEtatsFinis *aef, const char *nomFichier) {
+    FILE *fichier = fopen(nomFichier, "w");
+    if (fichier == NULL) {
         printf("Erreur lors de l'ouverture du fichier.\n");
         return;
     }
-    fprintf(file, "%d %d\n", fsm->numberOfStates, fsm->numberOfSymbols);
-    for (int i = 0; i < fsm->numberOfStates; i++) {
-        for (int j = 0; j < fsm->numberOfSymbols; j++) {
-            fprintf(file, "%d ", fsm->transitionMatrix[i][j]);
+    fprintf(fichier, "%d %d\n", aef->nombreEtats, aef->nombreSymboles);
+    for (int i = 0; i < aef->nombreEtats; i++) {
+        for (int j = 0; j < aef->nombreSymboles; j++) {
+            fprintf(fichier, "%d ", aef->matriceTransition[i][j]);
         }
-        fprintf(file, "\n");
+        fprintf(fichier, "\n");
     }
-    fclose(file);
-    printf("FSM enregistrée dans le fichier '%s'.\n", filename);
+    fclose(fichier);
+    printf("AEF enregistré dans le fichier '%s'.\n", nomFichier);
 }
 
-void loadFSMFromFile(FiniteStateMachine **fsm, const char *filename) {
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
+// Charger l'AEF depuis un fichier
+void chargerAEFDepuisFichier(AutomateEtatsFinis **aef, const char *nomFichier) {
+    FILE *fichier = fopen(nomFichier, "r");
+    if (fichier == NULL) {
         printf("Erreur lors de l'ouverture du fichier.\n");
         return;
     }
-    int states, symbols;
-    fscanf(file, "%d %d", &states, &symbols);
-    *fsm = createFSM(states, symbols);
-    for (int i = 0; i < states; i++) {
-        for (int j = 0; j < symbols; j++) {
-            fscanf(file, "%d", &(*fsm)->transitionMatrix[i][j]);
+    int etats, symboles;
+    fscanf(fichier, "%d %d", &etats, &symboles);
+    *aef = creerAEF(etats, symboles);
+    for (int i = 0; i < etats; i++) {
+        for (int j = 0; j < symboles; j++) {
+            fscanf(fichier, "%d", &(*aef)->matriceTransition[i][j]);
         }
     }
-    fclose(file);
-    printf("FSM chargée depuis le fichier '%s'.\n", filename);
+    fclose(fichier);
+    printf("AEF chargé depuis le fichier '%s'.\n", nomFichier);
 }
 
-void deleteFSM(FiniteStateMachine *fsm) {
-    for (int i = 0; i < fsm->numberOfStates; i++) {
-        free(fsm->transitionMatrix[i]);
+// Supprimer l'AEF
+void supprimerAEF(AutomateEtatsFinis *aef) {
+    for (int i = 0; i < aef->nombreEtats; i++) {
+        free(aef->matriceTransition[i]);
     }
-    free(fsm->transitionMatrix);
-    free(fsm);
-    printf("FSM supprimée.\n");
+    free(aef->matriceTransition);
+    free(aef);
+    printf("AEF supprimé.\n");
+}
+
+// Vérifier si un mot est reconnu par l'AEF
+int motReconnuParAEF(AutomateEtatsFinis *aef, const char *mot) {
+    int etatCourant = 0;
+
+    for (int i = 0; i < strlen(mot); i++) {
+        int symbole = (int)mot[i];
+        if (symbole < 0 || symbole >= MAX_SYMBOLES || aef->matriceTransition[etatCourant][symbole] == -1) {
+            return 0; // Transition non valide, mot non reconnu
+        }
+        etatCourant = aef->matriceTransition[etatCourant][symbole];
+    }
+
+    // Ajouter ici la logique pour vérifier si etatCourant est un état acceptant
+    // Retourner 1 (vrai) si l'état est acceptant, sinon 0 (faux)
+    // Pour l'instant, nous supposons que le dernier état est l'état acceptant
+    return etatCourant == aef->nombreEtats - 1;
 }
 
 int main() {
-    int choice;
+    int choix;
     printf("Choisir une option :\n");
-    printf("1. Saisir une nouvelle FSM\n");
-    printf("2. Charger une FSM depuis un fichier\n");
+    printf("1. Saisir un nouvel AEF\n");
+    printf("2. Charger un AEF depuis un fichier\n");
     printf("Votre choix : ");
-    scanf("%d", &choice);
+    scanf("%d", &choix);
 
-    FiniteStateMachine *fsm;
+    AutomateEtatsFinis *aef;
 
-    if (choice == 1) {
-        int states, symbols;
+    if (choix == 1) {
+        int etats, symboles;
         printf("Nombre d'états : ");
-        scanf("%d", &states);
+        scanf("%d", &etats);
         printf("Nombre de symboles : ");
-        scanf("%d", &symbols);
+        scanf("%d", &symboles);
 
-        fsm = createFSM(states, symbols);
-        inputFSM(fsm);
-        printFSM(fsm);
-        saveFSMToFile(fsm, "fsm.txt");
-    } else if (choice == 2) {
-        char filename[100];
+        aef = creerAEF(etats, symboles);
+        saisirTransitionsAEF(aef);
+        afficherAEF(aef);
+        sauvegarderAEF(aef, "aef.txt");
+    } else if (choix == 2) {
+        char nomFichier[100];
         printf("Entrez le nom du fichier à charger : ");
-        scanf("%s", filename);
-        loadFSMFromFile(&fsm, filename);
-        printFSM(fsm);
+        scanf("%s", nomFichier);
+        chargerAEFDepuisFichier(&aef, nomFichier);
+        afficherAEF(aef);
     } else {
         printf("Choix non valide.\n");
         return 1;
     }
 
-    deleteFSM(fsm);
+    char mot[100];
+    printf("Entrez un mot pour le tester avec l'AEF : ");
+    scanf("%s", mot);
+    if (motReconnuParAEF(aef, mot)) {
+        printf("Le mot '%s' est reconnu par l'AEF.\n", mot);
+    } else {
+        printf("Le mot '%s' n'est pas reconnu par l'AEF.\n", mot);
+    }
+
+    supprimerAEF(aef);
     return 0;
 }
