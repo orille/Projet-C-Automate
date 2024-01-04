@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+// Définition de la structure de transition
+typedef struct {
+    int currentState;
+    char inputSymbol;
+    int nextState;
+} Transition;
+
+// Structure de l'automate
+typedef struct {
+    int numStates;
+    int numTransitions;
+    Transition *transitions;
+} Automaton;
+
+
+// 3
+bool isComplete(const Transition transitions[], int numTransitions, int numStates, const char alphabet[]) {
+    for (int state = 0; state < numStates; ++state) {
+        for (int symbol = 0; symbol < strlen(alphabet); ++symbol) {
+            bool transitionFound = false;
+
+            // Vérifier si une transition est définie pour la paire (état, symbole)
+            for (int i = 0; i < numTransitions; ++i) {
+                if (transitions[i].currentState == state && transitions[i].inputSymbol == alphabet[symbol]) {
+                    transitionFound = true;
+                    break;
+                }
+            }
+
+            // Si aucune transition n'est trouvée, l'automate n'est pas complet
+            if (!transitionFound) {
+                return false;
+            }
+        }
+    }
+    return true; // L'automate est complet
+}
+
+// Fonction pour ajouter une transition à l'automate
+void addTransition(Automaton *automaton, int currentState, char inputSymbol, int nextState) {
+    automaton->transitions[automaton->numTransitions].currentState = currentState;
+    automaton->transitions[automaton->numTransitions].inputSymbol = inputSymbol;
+    automaton->transitions[automaton->numTransitions].nextState = nextState;
+    automaton->numTransitions++;
+}
+//4
+while(!isComplete(const Transition transitions[], int numTransitions, int numStates, const char alphabet[]){
+void addNonFinalState(Automaton *automaton, int *finalStates, int *numFinalStates) {
+    int newState = automaton->numStates;
+    automaton->numStates++;
+
+    // Ajouter une transition bidirectionnelle avec une lettre arbitraire
+    addTransition(automaton, newState, 'x', newState);
+    addTransition(automaton, newState, 'y', newState);
+
+    // Ajouter l'état non final à la liste des états finaux (si nécessaire)
+    if (!isFinalState(newState, finalStates, *numFinalStates)) {
+        finalStates[*numFinalStates] = newState;
+        (*numFinalStates)++;
+    }
+}}
