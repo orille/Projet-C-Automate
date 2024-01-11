@@ -11,11 +11,11 @@ typedef struct {    // définition de la structure FiniteStateMachine à l'aide 
     int **matrice_transition;
 } FiniteStateMachine;
 
-FiniteStateMachine *creationFSM(int etats, int symboles);    // la fsm accede à la valeur de l'objet créé par la fonction creationFSM et ses proprités saisies ou importées
-void saisieFSM(FiniteStateMachine *fsm);    //   
-void affichageFSM(FiniteStateMachine *fsm);
-void sauvegardeFSMfichier(FiniteStateMachine *fsm, const char *nom_fichier);
-void chargerFSMfichier(FiniteStateMachine **fsm, const char *nom_fichier);
-void supprFSM(FiniteStateMachine *fsm);
+FiniteStateMachine *creationFSM(int etats, int symboles);    // la fonction creationFSM va allouer dynamiquement de la mémoire pour crééer une instance de la structure FiniteStateMachine et renverra un pointeur vers cette instance 
+void saisieFSM(FiniteStateMachine *fsm);    // le prototype de la fonction saisieFSM prend en argument un pointeur vers une strucure FiniteStateMAchine créée et ne retourne aucune valeur   
+void affichageFSM(FiniteStateMachine *fsm);    // le prototype de la fonction affichageFSM prend en argument un pointeur vers une strucure FiniteStateMAchine créée et ne retourne aucune valeur 
+void sauvegardeFSMfichier(FiniteStateMachine *fsm, const char *nom_fichier);    // le prototype de la fonction sauvegardeFSMfichier prend en argument un pointeur vers une strucure FiniteStateMAchine créée et le nom du fichier texte (constante donc non modifiable) qui sera créée pour sauvegarder cette fsm
+void chargerFSMfichier(FiniteStateMachine **fsm, const char *nom_fichier);    // le prototype de la fonction chargerFSMfichier prend en argument un pointeur de pointeur vers une strucure FiniteStateMAchine créée (permet de modifier le pointeur originel vers la fsm pour allouer dynamiquement de la mémoire pour la struct ou ses données) et le nom du fichier texte (constante donc non modifiable) contenant la fsm qui sera chargée
+void supprFSM(FiniteStateMachine *fsm);     // le prototype de la fonction supprFSM prend en argument un pointeur vers une strucure FiniteStateMAchine créée et ne retourne aucune valeur   
 
 #endif // fin de la condition si FSH_H n'est pas définie
