@@ -70,30 +70,35 @@ void sauvegardeFSMfichier(FiniteStateMachine *fsm, const char *nom_fichier) {
     printf("FSM enregistrée dans le fichier '%s'.\n", nom_fichier);    // message à l'utilisateur pour l'informer que son fichier est sauvegardé
 }
 
-
+// Fonction pour charger et lire un fichier et obtenir les données de la fsm contenue dans ce fichier (nb états, nb symboles et transitions)
 void chargerFSMfichier(FiniteStateMachine **fsm, const char *nom_fichier) {
-    FICHIER *fichier = fopen(nom_fichier, "r");
+    FICHIER *fichier = fopen(nom_fichier, "r");    // ouverture d'un fichier texte en mode lecture "r"
+    // test pour savoir si l'ouverture du fichier est un succès ou non
     if (fichier == NULL) {
-        printf("Erreur lors de l'ouverture du fichier.\n");
+        printf("Erreur lors de l'ouverture du fichier.\n");    // message affiché dans la console si échec lors de l'ouverture du fichier
         return;
     }
     int etats, symboles;
-    fscanf(fichier, "%d %d", &etats, &symboles);
-    *fsm = creationFSM(etats, symboles);
+    fscanf(fichier, "%d %d", &etats, &symboles); // lit la première ligne du fichier contenant le nombre d'états et de symboles séparés par un espace (le fichier chargé doit donc respecter cette regle d'écriture)
+    *fsm = creationFSM(etats, symboles);    // création donc d'une nouvelle instance de la fsm à partir des nb états et symboles lus
+    // lit chaque état de la fsm
     for (int i = 0; i < etats; i++) {
+        // lit chaque symbole pour l'état i
         for (int j = 0; j < symboles; j++) {
-            fscanf(fichier, "%d", &(*fsm)->matrice_transition[i][j]);
+            fscanf(fichier, "%d", &(*fsm)->matrice_transition[i][j]); // lecture valeur de la transition dans le fichier et stockage de cette valeur dans la matrice de transition
         }
     }
-    fclose(fichier);
-    printf("FSM chargée depuis le fichier '%s'.\n", nom_fichier);
+    fclose(fichier); // une fois toutes les données lues à partir du fichier et affectées aux variables à la nouvelle instance de la fsm on ferme le fichier
+    printf("FSM chargée depuis le fichier '%s'.\n", nom_fichier);    // message à l'utilisateur pour l'informer que son fichier est bien chargé
 }
 
+// Fonction pour libérer la mémoire allouée à une instance de la struct FiniteStateMachine et sa matrice de transition
 void supprFSM(FiniteStateMachine *fsm) {
+    // lit chaque ligne de la matrice de transition
     for (int i = 0; i < fsm->nombre_etats; i++) {
-        free(fsm->matrice_transition[i]);
+        free(fsm->matrice_transition[i]);    // libération de la mémoire allouée à la ligne i de la matrice de transition
     }
-    free(fsm->matrice_transition);
-    free(fsm);
-    printf("FSM supprimée.\n");
+    free(fsm->matrice_transition);    // libèration de la mémoire allouée à la matrice de transition
+    free(fsm);    // libération de la mémoire allouée à la structure FiniteStateMachine
+    printf("FSM supprimée.\n");    // message à l'utilisateur pour l'informer que la fsm est bien supprimée
 }
