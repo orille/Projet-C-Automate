@@ -4,16 +4,16 @@
 #define FSM_H
 
 typedef struct {
-    int numberOfStates;
-    int numberOfSymbols;
-    int **transitionMatrix;
+    int nombre_etats;
+    int nombre_symboles;
+    int **matrice_transition;
 } FiniteStateMachine;
 
-FiniteStateMachine *createFSM(int states, int symbols);
-void inputFSM(FiniteStateMachine *fsm);
-void printFSM(FiniteStateMachine *fsm);
-void saveFSMToFile(FiniteStateMachine *fsm, const char *filename);
-void loadFSMFromFile(FiniteStateMachine **fsm, const char *filename);
-void deleteFSM(FiniteStateMachine *fsm);
+FiniteStateMachine *creationFSM(int etats, int symboles);
+void saisieFSM(FiniteStateMachine *fsm);
+void affichageFSM(FiniteStateMachine *fsm);
+void sauvegardeFSMfichier(FiniteStateMachine *fsm, const char *nom_fichier);
+void chargerFSMfichier(FiniteStateMachine **fsm, const char *nom_fichier);
+void supprFSM(FiniteStateMachine *fsm);
 
 #endif // FSM_H
