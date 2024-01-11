@@ -33,31 +33,41 @@ void saisieFSM(FiniteStateMachine *fsm) {
     }
 }
 
+// Fonction pour afficher la matrice de transition de la fsm
 void affichageFSM(FiniteStateMachine *fsm) {
     printf("Matrice de transition de la FSM :\n");
+    // lit chaque état
     for (int i = 0; i < fsm->nombre_etats; i++) {
+        // lit chaque symbole pour l'état i
         for (int j = 0; j < fsm->nombre_symboles; j++) {
+            // affiche transition pour état i et symbole j
             printf("%d ", fsm->matrice_transition[i][j]);
         }
+        // retour ligne apres toutes les transitions d'un état affichées
         printf("\n");
     }
 }
 
+// Fonction pour sauvegarder le nombre d'états, le nombre de symboles et la matrice de transition d'une struct FiniteStateMachine dans un fichier txt
 void sauvegardeFSMfichier(FiniteStateMachine *fsm, const char *nom_fichier) {
-    FILE *fichier = fopen(nom_fichier, "w");
+    FILE *fichier = fopen(nom_fichier, "w");    // ouverture d'un fichier texte en mode écriture "w" et nommé par la valeur l'argument nom_fichier
+    // test pour savoir si l'ouverture du fichier est un succès ou non
     if (fichier == NULL) {
-        printf("Erreur lors de l'ouverture du fichier.\n");
+        printf("Erreur lors de l'ouverture du fichier.\n");    // message affiché dans la console si échec lors de l'ouverture du fichier
         return;
     }
+    // fprintf permet d'écrire dans le fichier le nombre d'états et de symboles de la fsm et ensuite de passer à une nouvelle ligne pour les autres données en écrire
     fprintf(fichier, "%d %d\n", fsm->nombre_etats, fsm->nombre_symboles);
+    // lit chaque état de la fsm
     for (int i = 0; i < fsm->nombre_etats; i++) {
+        // lit chaque symbole pour l'état i
         for (int j = 0; j < fsm->nombre_symboles; j++) {
-            fprintf(fichier, "%d ", fsm->matrice_transition[i][j]);
+            fprintf(fichier, "%d ", fsm->matrice_transition[i][j]); // écrit la valeur de la transition dans le fichier et ajoute un espace
         }
-        fprintf(fichier, "\n");
+        fprintf(fichier, "\n"); // une fois toutes les transitions d'un état écrites retour à une nouvelle ligne pour répéter l'action pour chaque état
     }
-    fclose(fichier);
-    printf("FSM enregistrée dans le fichier '%s'.\n", nom_fichier);
+    fclose(fichier);    // une fois toutes les données écrites fermeture du fichier
+    printf("FSM enregistrée dans le fichier '%s'.\n", nom_fichier);    // message à l'utilisateur pour l'informer que son fichier est sauvegardé
 }
 
 
