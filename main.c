@@ -24,17 +24,18 @@ int main() {    // interface utilisateur via la console pour qu'il détermine so
         saisieFSM(fsm);    // utilisation fonction saisieFSM (definition dans fsm.h) pour saisir les valeurs de la FSM
         affichageFSM(fsm);    // utilisation fonction affichageFSM (definition dans fsm.h) pour afficher la FSM une fois les saisies terminées
         savegardeFSMfichier(fsm, "fsm.txt");    // utilisation fonction saveFSMfichier (definition dans fsm.h) pour sauvegarder cette FSM dans un nouveau fichier texte nommé "fsm.txt"
-    } else if (choix == 2) {
-        char nom_fichier[100];
-        printf("Entrez le nom du fichier à charger : ");
-        scanf("%s", nom_fichier);
-        chargerFSMfichier(&fsm, nom_fichier);
+    } else if (choix == 2) {    // cas choix de l'utilisateur d'importer à partir d'un fichier les propriétés et les valeurs de sa FSM    
+        char nom_fichier[50];    // définition d'une variable char d'une taille de 50 caractères (pas besoin de plus) pour le nom du fichier texte qui va être importé
+        printf("Entrez le nom du fichier à charger : ");    // saisie de l'utilisateur du nom du fichier texte à importer
+        scanf("%s", nom_fichier);    // affectation de la valeur saisie à la variable nom_fichier
+        chargerFSMfichier(&fsm, nom_fichier);    // utilisation de la fonction chargerFSMfichier (déclaration dasn fsm.h) pour charger ce fichier texte et la fsm
         afficherFSM(fsm);
-    } else {
-        printf("Choix non valide.\n");
+        // on devrait demander à l'utilisateur si il est satisfait de sa fsm alors on sauvegarde cette fsm et sinon lui proposer de le modifier et ensuite de save avec sauvegardeFSMfichier
+    } else {    // autre cas si l'utilisateur ne saisie pas un choix 1 ou 2
+        printf("Choix non valide.\n");    // affichage message d'erreur
         return 1;
     }
 
-    supprFSM(fsm);
+    supprFSM(fsm);    // utilisation de la fonction supprFSM (définition dans fsm.h) pour supprimer la fsm
     return 0;
 }
