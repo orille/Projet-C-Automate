@@ -3,26 +3,32 @@
 #include <stdlib.h>
 #include "fsm.h"
 
+// Création d'une nouvelle instance de la structure FiniteStateMachine et initialisation des variables retournant un pointeur vers cette nouvelle structure
 FiniteStateMachine *creationFSM(int etats, int symboles) {
-    FiniteStateMachine *fsm = malloc(sizeof(FiniteStateMachine));
-    fsm->nombre_etats = etats;
+    FiniteStateMachine *fsm = malloc(sizeof(FiniteStateMachine));    // allocation dynamique de la mémoire pour la nouvelle instance de FiniteStateMachine
+    // initialisations des variables de la structure avec les valeurs int en argument de cette fonction
+    fsm->nombre_etats = etats;    
     fsm->nombre_symboles = symboles;
+    // allocation dynamique de la mémoire pour la matruce de transition
     fsm->matrice_transition = malloc(etats * sizeof(int *));
     for (int i = 0; i < etats; i++) {
-        fsm->matrice_transition[i] = malloc(symboles * sizeof(int));
+        fsm->matrice_transition[i] = malloc(symboles * sizeof(int));    // pour chaque lignes de la matrice
         for (int j = 0; j < symboles; j++) {
-            fsm->matrice_transition[i][j] = -1;
+            fsm->matrice_transition[i][j] = -1;    // valeur par défaut pour chaque élément de la matrice à -1 
         }
     }
-    return fsm;
+    return fsm;    // retourne un pointeur vers la nouvelle instance de la structure FiniteStateMachine
 }
 
+// Fonction pour saisir les transitions de chaque état et symbole de la fsm créée
 void saisieFSM(FiniteStateMachine *fsm) {
     printf("Entrer les transitions pour chaque état et symbole :\n");
+    // lit chaque état de la fsm en utilisant la variable nombre_etats de la structure
     for (int i = 0; i < fsm->nombre_etats; i++) {
+        // lit chaque symbole de la fsm en utilisant la variable nombre_symboles de la structure
         for (int j = 0; j < fsm->nombre_symboles; j++) {
-            printf("Transition de l'état %d avec le symbole %d: ", i, j);
-            scanf("%d", &fsm->matrice_transition[i][j]);
+            printf("Transition de l'état %d avec le symbole %d: ", i, j);    // l'utilisateur doit saisir la transition pour chaque état i et symbole j
+            scanf("%d", &fsm->matrice_transition[i][j]);    // applique ces transitions dans la variable matrice_transition de la structure
         }
     }
 }
