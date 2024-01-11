@@ -23,7 +23,7 @@ int main() {    // interface utilisateur via la console pour qu'il détermine so
         fsm = creationFSM(etats, symboles); // utilisation de la fonction creationFSM (definition cf fsm.h) pour crééer la FSM avec les propriétés (etats et symboles) saisies par l'utilisateur
         saisieFSM(fsm);    // utilisation fonction saisieFSM (definition dans fsm.h) pour saisir les valeurs de la FSM
         affichageFSM(fsm);    // utilisation fonction affichageFSM (definition dans fsm.h) pour afficher la FSM une fois les saisies terminées
-        savegardeFSMfichier(fsm, "fsm.txt");    // utilisation fonction saveFSMfichier (definition dans fsm.h) pour sauvegarder cette FSM dans un nouveau fichier texte nommé "fsm.txt"
+        sauvegardeFSMfichier(fsm, "fsm.txt");    // utilisation fonction saveFSMfichier (definition dans fsm.h) pour sauvegarder cette FSM dans un nouveau fichier texte nommé "fsm.txt"
     } else if (choix == 2) {    // cas choix de l'utilisateur d'importer à partir d'un fichier les propriétés et les valeurs de sa FSM    
         char nom_fichier[50];    // définition d'une variable char d'une taille de 50 caractères (pas besoin de plus) pour le nom du fichier texte qui va être importé
         printf("Entrez le nom du fichier à charger : ");    // saisie de l'utilisateur du nom du fichier texte à importer
