@@ -1,9 +1,12 @@
 // main.c
 // Modifier le Finite State Machine (FSM) et remplacer par Automate d'Etat Finis (AEF)
 #include <stdio.h>
+#include <stdbool.h> // bibliothèque pour booleen
+#include <string.h>
 #include "fsm.h"
+#include "fsm.c"
 
-int main() {    // interface utilisateur via la console pour qu'il détermine son choix entre saisir manuellement la FSM ou l'importer à partir d'un fichier texte
+int main() {   // interface utilisateur via la console pour qu'il détermine son choix entre saisir manuellement la FSM ou l'importer à partir d'un fichier texte
     int choix;
     printf("Choisir une option :\n");
     printf("1. Saisir une nouvelle FSM\n");
@@ -22,7 +25,7 @@ int main() {    // interface utilisateur via la console pour qu'il détermine so
 
         fsm = creationFSM(etats, symboles); // utilisation de la fonction creationFSM (definition cf fsm.h) pour crééer la FSM avec les propriétés (etats et symboles) saisies par l'utilisateur
         saisieFSM(fsm);    // utilisation fonction saisieFSM (definition dans fsm.h) pour saisir les valeurs de la FSM
-        affichageFSM(fsm);    // utilisation fonction affichageFSM (definition dans fsm.h) pour afficher la FSM une fois les saisies terminées
+        afficherFSM(fsm);    // utilisation fonction affichageFSM (definition dans fsm.h) pour afficher la FSM une fois les saisies terminées
         sauvegardeFSMfichier(fsm, "fsm.txt");    // utilisation fonction saveFSMfichier (definition dans fsm.h) pour sauvegarder cette FSM dans un nouveau fichier texte nommé "fsm.txt"
     } else if (choix == 2) {    // cas choix de l'utilisateur d'importer à partir d'un fichier les propriétés et les valeurs de sa FSM    
         char nom_fichier[50];    // définition d'une variable char d'une taille de 50 caractères (pas besoin de plus) pour le nom du fichier texte qui va être importé
@@ -36,6 +39,35 @@ int main() {    // interface utilisateur via la console pour qu'il détermine so
         return 1;
     }
 
-    supprFSM(fsm);    // utilisation de la fonction supprFSM (définition dans fsm.h) pour supprimer la fsm
-    return 0;
-}
+    if (VerifComplet(fsm)) {
+        printf("L'automate est complet.\n");
+    } else {
+        printf("L'automate n'est pas complet.\n");
+        printf("Souhaitez-vous le rendre complet ? (oui ou 0 pour non) ");
+        char answer[3];
+        scanf("%s", answer);
+        if (strcmp(answer, "oui") == 0) {
+            CompleterFSM(fsm);
+            printf("Votre FSM a été complétée avec succès !\n");
+            afficherFSM(fsm); // Afficher la FSM complétée
+        } else {
+            printf("Ok.\n");
+        }
+    }
+    
+    // Add code to verify if a word is recognized by the FSM
+    printf("Entrez un mot à vérifier : ");
+    char mot[100]; // Assuming a maximum word length of 100 characters
+    scanf("%s", mot);
+    
+    if (estReconnu(fsm, mot)) {
+        printf("Le mot est reconnu par la FSM.\n");
+    } else {
+        printf("Le mot n'est pas reconnu par la FSM.\n");
+    }
+
+    // Placer la suppression de la FSM ici, après toutes les interactions utilisateur
+    supprFSM(fsm);
+
+return 0; }
+
