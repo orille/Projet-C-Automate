@@ -105,52 +105,49 @@ void supprFSM(FiniteStateMachine *fsm) {
     printf("FSM supprimée.\n");    // message à l'utilisateur pour l'informer que la fsm est bien supprimée
 }
 
-// Fonction pour vérifier si un fsm est complet ou non (Question 3)
-bool VerifComplet(FiniteStateMachine *fsm) {
+// Fonction pour vérifier si un fsm est complet ou non (Question 3) retournant un booléen
+bool VerifComplet(FiniteStateMachine *fsm) {    
     int etat, symbole;
-    for (etat = 0; etat < fsm->nombre_etats; etat++) {
-        for (symbole = 0; symbole < fsm->nombre_symboles; symbole++) {
-            if (fsm->matrice_transition[etat][symbole] == -1) { // Supposons que -1 représente une transition manquante
+    for (etat = 0; etat < fsm->nombre_etats; etat++) {    // lit chaque état de la fsm
+        for (symbole = 0; symbole < fsm->nombre_symboles; symbole++) {    // lit chaque symbole pour chaque état de la fsm
+            if (fsm->matrice_transition[etat][symbole] == -1) { // -1 représente une transition manquante donc si il existe au moins une seule transition manquante alors la fonction retourne false, fsm pas complet
                 return false;
             }
         }
     }
-    return true;
+    return true;    // si après le parcourt de toutes les transitions il n'y a aucune transition manquante alors la fonction retourne true, fsm complet
 }
 
+// Fonction pour compléter la fsm en argumant(Question 4) 
 void CompleterFSM(FiniteStateMachine *fsm) {
     int etat, symbole;
-    for (etat = 0; etat < fsm->nombre_etats; etat++) {
-        for (symbole = 0; symbole < fsm->nombre_symboles; symbole++) {
-            if (fsm->matrice_transition[etat][symbole] == -1) { // Supposons que -1 représente une transition manquante
-                fsm->matrice_transition[etat][symbole] = 0;/* un état par défaut */ // Par exemple, revenir à l'état 0 ou à un état d'erreur
+    for (etat = 0; etat < fsm->nombre_etats; etat++) {    // lit chaque état de la fsm
+        for (symbole = 0; symbole < fsm->nombre_symboles; symbole++) {    // lit chaque symbole pour chaque état de la fsm
+            if (fsm->matrice_transition[etat][symbole] == -1) {     // Si il y a une transition manquante
+                fsm->matrice_transition[etat][symbole] = 0;    // alors cette transition prendra comme valeur 0 
             }
         }
     }
 }
-bool estReconnu(const FiniteStateMachine* fsm, const char* mot) {
+// Fonction pour vérifier si un mot est reconnu par la fsm (Question 2) retournant un booléen
+bool estReconnu(FiniteStateMachine* fsm, const char* mot) {
     int etatActuel = 0; // Start from the initial state
 
-    for (int i = 0; i < strlen(mot); i++) {
-        int symbole = mot[i] - '0'; // Convert the character to an integer (assuming the symbols are represented as integers)
-        
+    for (int i = 0; i < strlen(mot); i++) {    // lit chaque lettre du mot saisie en argument
+        int symbole = mot[i] - '0'; // Convert the character to an integer
         // Transition to the next state based on the symbol
         etatActuel = fsm->matrice_transition[etatActuel][symbole];
-        
         if (etatActuel == -1) {
             // Invalid transition, the word is not recognized
             return false;
         }
-    }
-
+    
     // Check if the final state is one of the accepted states
     for (int i = 0; i < fsm->nb_etats_accepteurs; i++) {
         if (etatActuel == fsm->etats_accepteurs[i]) {
             // The word is recognized
             return true;
         }
-    }
-
     // The word is not recognized
     return false;
 }
