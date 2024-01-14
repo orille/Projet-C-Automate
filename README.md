@@ -8,6 +8,8 @@ For this project, it was necessary to divide the code into three distinct files:
 
 We tried to introduce automated tests for each commit on the main branch of our repository using a feature integrated into GitHub: .github/workflows/c-cpp.yml.
 
+In light of our difficulties in C and to enhance group collaboration, we have decided to comment on each line of our code in French so that every member of the group can review and work on the project. Additionally, we experienced extended periods without working on the project, making it challenging to comprehend code written a few weeks earlier. We translated everything into English at the end of the project.
+
 Used links: 
 https://www.cprogramming.com/tutorial/c/lesson6.html
 https://www.cprogramming.com/tutorial/c/lesson7.html
