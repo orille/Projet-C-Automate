@@ -6,6 +6,8 @@ This project also marked our first experience with a group programming project. 
 
 For this project, it was necessary to divide the code into three distinct files: main.c, fsm.c (containing the definitions of functions), and fsm.h (its header file containing the prototypes of the fsm functions).
 
+We tried to introduce automated tests for each commit on the main branch of our repository using a feature integrated into GitHub: .github/workflows/c-cpp.yml.
+
 Used links: 
 https://www.cprogramming.com/tutorial/c/lesson6.html
 https://www.cprogramming.com/tutorial/c/lesson7.html
