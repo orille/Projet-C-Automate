@@ -2,138 +2,139 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h> // bibliothèque pour booleen
+#include <stdbool.h> // library for boolean
 #include "fsm.h"
 
-// Création d'une nouvelle instance de la structure FiniteStateMachine et initialisation des variables retournant un pointeur vers cette nouvelle structure
+// Create a new instance of the FiniteStateMachine structure and initialize variables, returning a pointer to this new structure
 FiniteStateMachine *creationFSM(int etats, int symboles) {
-    FiniteStateMachine *fsm = malloc(sizeof(FiniteStateMachine));    // allocation dynamique de la mémoire pour la nouvelle instance de FiniteStateMachine
-    // initialisations des variables de la structure avec les valeurs int en argument de cette fonction
+    FiniteStateMachine *fsm = malloc(sizeof(FiniteStateMachine));    // dynamic memory allocation for the new FiniteStateMachine instance
+    // initialize structure variables with the integer values passed as arguments to this function
     fsm->nombre_etats = etats;    
     fsm->nombre_symboles = symboles;
-    // allocation dynamique de la mémoire pour la matruce de transition
+    // dynamic memory allocation for the transition matrix
     fsm->matrice_transition = malloc(etats * sizeof(int *));
     for (int i = 0; i < etats; i++) {
-        fsm->matrice_transition[i] = malloc(symboles * sizeof(int));    // pour chaque lignes de la matrice
+        fsm->matrice_transition[i] = malloc(symboles * sizeof(int));    // for each row of the matrix
         for (int j = 0; j < symboles; j++) {
-            fsm->matrice_transition[i][j] = -1;    // valeur par défaut pour chaque élément de la matrice à -1 
+            fsm->matrice_transition[i][j] = -1;    // default value for each element of the matrix is -1 
         }
     }
-    return fsm;    // retourne un pointeur vers la nouvelle instance de la structure FiniteStateMachine
+    return fsm;    // return a pointer to the new FiniteStateMachine instance
 }
 
-// Fonction pour saisir les transitions de chaque état et symbole de la fsm créée
+// Function to input transitions for each state and symbol of the created fsm
 void saisieFSM(FiniteStateMachine *fsm) {
     printf("Entrer les transitions pour chaque état et symbole :\n");
-    // lit chaque état de la fsm en utilisant la variable nombre_etats de la structure
+    // read each state of the fsm using the number_states variable of the structure
     for (int i = 0; i < fsm->nombre_etats; i++) {
-        // lit chaque symbole de la fsm en utilisant la variable nombre_symboles de la structure
+        // read each symbol of the fsm using the number_symbols variable of the structure
         for (int j = 0; j < fsm->nombre_symboles; j++) {
-            printf("Transition de l'état %d avec le symbole %d: ", i, j);    // l'utilisateur doit saisir la transition pour chaque état i et symbole j
-            scanf("%d", &fsm->matrice_transition[i][j]);    // applique ces transitions dans la variable matrice_transition de la structure
+            printf("Transition de l'état %d avec le symbole %d: ", i, j);    // the user must input the transition for each state i and symbol j
+            scanf("%d", &fsm->matrice_transition[i][j]);    // apply these transitions to the transition_matrix variable of the structure
         }
     }
 }
 
-// Fonction pour afficher la matrice de transition de la fsm
+// Function to display the transition matrix of the fsm
 void afficherFSM(FiniteStateMachine *fsm) {
     printf("Matrice de transition de la FSM :\n");
-    // lit chaque état
+    // read each state
     for (int i = 0; i < fsm->nombre_etats; i++) {
-        // lit chaque symbole pour l'état i
+        // read each symbol for state i
         for (int j = 0; j < fsm->nombre_symboles; j++) {
-            // affiche transition pour état i et symbole j
+            // display transition for state i and symbol j
             printf("%d ", fsm->matrice_transition[i][j]);
         }
-        // retour ligne apres toutes les transitions d'un état affichées
+        // newline after all transitions for a state are displayed
         printf("\n");
     }
 }
 
-// Fonction pour sauvegarder le nombre d'états, le nombre de symboles et la matrice de transition d'une struct FiniteStateMachine dans un fichier txt
+// Function to save the number of states, the number of symbols, and the transition matrix of a FiniteStateMachine struct to a text file
 void sauvegardeFSMfichier(FiniteStateMachine *fsm, const char *nom_fichier) {
-    FILE *fichier = fopen(nom_fichier, "w");    // ouverture d'un fichier texte en mode écriture "w" et nommé par la valeur l'argument nom_fichier
-    // test pour savoir si l'ouverture du fichier est un succès ou non
+    FILE *fichier = fopen(nom_fichier, "w");    // open a text file in write mode "w" and named by the value of the filename argument
+    // check if the file opening is successful or not
     if (fichier == NULL) {
-        printf("Erreur lors de l'ouverture du fichier.\n");    // message affiché dans la console si échec lors de l'ouverture du fichier
+        printf("Erreur lors de l'ouverture du fichier.\n");    // message displayed in the console if opening the file fails
         return;
     }
-    // fprintf permet d'écrire dans le fichier le nombre d'états et de symboles de la fsm et ensuite de passer à une nouvelle ligne pour les autres données en écrire
+    // fprintf writes the number of states and symbols of the fsm to the file and then moves to a new line for the other data to be written
     fprintf(fichier, "%d %d\n", fsm->nombre_etats, fsm->nombre_symboles);
-    // lit chaque état de la fsm
+    // read each state of the fsm
     for (int i = 0; i < fsm->nombre_etats; i++) {
-        // lit chaque symbole pour l'état i
+        // read each symbol for state i
         for (int j = 0; j < fsm->nombre_symboles; j++) {
-            fprintf(fichier, "%d ", fsm->matrice_transition[i][j]); // écrit la valeur de la transition dans le fichier et ajoute un espace
+            fprintf(fichier, "%d ", fsm->matrice_transition[i][j]); // write the transition value to the file and add a space
         }
-        fprintf(fichier, "\n"); // une fois toutes les transitions d'un état écrites retour à une nouvelle ligne pour répéter l'action pour chaque état
+        fprintf(fichier, "\n"); // once all transitions for a state are written, return to a new line to repeat the action for each state
     }
-    fclose(fichier);    // une fois toutes les données écrites fermeture du fichier
-    printf("FSM enregistrée dans le fichier '%s'.\n", nom_fichier);    // message à l'utilisateur pour l'informer que son fichier est sauvegardé
+    fclose(fichier);    // once all data is written, close the file
+    printf("FSM enregistrée dans le fichier '%s'.\n", nom_fichier);    // message to the user informing that their file is saved
 }
 
-// Fonction pour charger et lire un fichier et obtenir les données de la fsm contenue dans ce fichier (nb états, nb symboles et transitions)
+// Function to load and read a file and get the fsm data from that file (number of states, number of symbols, and transitions)
 void chargerFSMfichier(FiniteStateMachine **fsm, const char *nom_fichier) {
-    FILE *fichier = fopen(nom_fichier, "r");    // ouverture d'un fichier texte en mode lecture "r"
-    // test pour savoir si l'ouverture du fichier est un succès ou non
+    FILE *fichier = fopen(nom_fichier, "r");    // open a text file in read mode "r"
+    // check if the file opening is successful or not
     if (fichier == NULL) {
-        printf("Erreur lors de l'ouverture du fichier.\n");    // message affiché dans la console si échec lors de l'ouverture du fichier
+        printf("Erreur lors de l'ouverture du fichier.\n");    // message displayed in the console if opening the file fails
         return;
     }
     int etats, symboles;
-    fscanf(fichier, "%d %d", &etats, &symboles); // lit la première ligne du fichier contenant le nombre d'états et de symboles séparés par un espace (le fichier chargé doit donc respecter cette regle d'écriture)
-    *fsm = creationFSM(etats, symboles);    // création donc d'une nouvelle instance de la fsm à partir des nb états et symboles lus
-    // lit chaque état de la fsm
+    fscanf(fichier, "%d %d", &etats, &symboles); // read the first line of the file containing the number of states and symbols separated by a space (the loaded file must follow this writing rule)
+    *fsm = creationFSM(etats, symboles);    // create a new instance of the fsm from the read number of states and symbols
+    // read each state of the fsm
     for (int i = 0; i < etats; i++) {
-        // lit chaque symbole pour l'état i
+        // read each symbol for state i
         for (int j = 0; j < symboles; j++) {
-            fscanf(fichier, "%d", &(*fsm)->matrice_transition[i][j]); // lecture valeur de la transition dans le fichier et stockage de cette valeur dans la matrice de transition
+            fscanf(fichier, "%d", &(*fsm)->matrice_transition[i][j]); // read the transition value from the file and store it in the transition matrix
         }
     }
-    fclose(fichier); // une fois toutes les données lues à partir du fichier et affectées aux variables à la nouvelle instance de la fsm on ferme le fichier
-    printf("FSM chargée depuis le fichier '%s'.\n", nom_fichier);    // message à l'utilisateur pour l'informer que son fichier est bien chargé
+    fclose(fichier); // once all data is read from the file and assigned to variables in the new fsm instance, close the file
+    printf("FSM chargée depuis le fichier '%s'.\n", nom_fichier);    // message to the user informing that their file is loaded successfully
 }
 
-// Fonction pour libérer la mémoire allouée à une instance de la struct FiniteStateMachine et sa matrice de transition
+// Function to free the memory allocated to an instance of the FiniteStateMachine struct and its transition matrix
 void supprFSM(FiniteStateMachine *fsm) {
-    // lit chaque ligne de la matrice de transition
+    // read each row of the transition matrix
     for (int i = 0; i < fsm->nombre_etats; i++) {
-        free(fsm->matrice_transition[i]);    // libération de la mémoire allouée à la ligne i de la matrice de transition
+        free(fsm->matrice_transition[i]);    // free the memory allocated for row i of the transition matrix
     }
-    free(fsm->matrice_transition);    // libèration de la mémoire allouée à la matrice de transition
-    free(fsm);    // libération de la mémoire allouée à la structure FiniteStateMachine
-    printf("FSM supprimée.\n");    // message à l'utilisateur pour l'informer que la fsm est bien supprimée
+    free(fsm->matrice_transition);    // free the memory allocated for the transition matrix
+    free(fsm);    // free the memory allocated for the FiniteStateMachine structure
+    printf("FSM supprimée.\n");    // message to the user informing that the fsm is successfully deleted
 }
 
-// Fonction pour vérifier si un fsm est complet ou non (Question 3) retournant un booléen
+// Function to check if an fsm is complete or not (Question 3) returning a boolean
 bool VerifComplet(FiniteStateMachine *fsm) {    
     int etat, symbole;
-    for (etat = 0; etat < fsm->nombre_etats; etat++) {    // lit chaque état de la fsm
-        for (symbole = 0; symbole < fsm->nombre_symboles; symbole++) {    // lit chaque symbole pour chaque état de la fsm
-            if (fsm->matrice_transition[etat][symbole] == -1) { // -1 représente une transition manquante donc si il existe au moins une seule transition manquante alors la fonction retourne false, fsm pas complet
+    for (etat = 0; etat < fsm->nombre_etats; etat++) {    // read each state of the fsm
+        for (symbole = 0; symbole < fsm->nombre_symboles; symbole++) {    // read each symbol for each state of the fsm
+            if (fsm->matrice_transition[etat][symbole] == -1) { // -1 represents a missing transition, so if there is at least one missing transition, the function returns false, fsm not complete
                 return false;
             }
         }
     }
-    return true;    // si après le parcourt de toutes les transitions il n'y a aucune transition manquante alors la fonction retourne true, fsm complet
+    return true;    // if after traversing all transitions there is no missing transition, the function returns true, fsm complete
 }
 
-// Fonction pour compléter la fsm en argumant(Question 4) 
+// Function to complete the fsm in argument (Question 4) 
 void CompleterFSM(FiniteStateMachine *fsm) {
     int etat, symbole;
-    for (etat = 0; etat < fsm->nombre_etats; etat++) {    // lit chaque état de la fsm
-        for (symbole = 0; symbole < fsm->nombre_symboles; symbole++) {    // lit chaque symbole pour chaque état de la fsm
-            if (fsm->matrice_transition[etat][symbole] == -1) {     // Si il y a une transition manquante
-                fsm->matrice_transition[etat][symbole] = 0;    // alors cette transition prendra comme valeur 0 
+    for (etat = 0; etat < fsm->nombre_etats; etat++) {    // read each state of the fsm
+        for (symbole = 0; symbole < fsm->nombre_symboles; symbole++) {    // read each symbol for each state of the fsm
+            if (fsm->matrice_transition[etat][symbole] == -1) {     // If there is a missing transition
+                fsm->matrice_transition[etat][symbole] = 0;    // then this transition will take the value 0 
             }
         }
     }
 }
-// Fonction pour vérifier si un mot est reconnu par la fsm (Question 2) retournant un booléen
+
+// Function to check if a word is recognized by the fsm (Question 2) returning a boolean
 bool estReconnu(FiniteStateMachine* fsm, const char* mot) {
     int etatActuel = 0; // Start from the initial state
 
-    for (int i = 0; i < strlen(mot); i++) {    // lit chaque lettre du mot saisie en argument
+    for (int i = 0; i < strlen(mot); i++) {    // read each letter of the input word
         int symbole = mot[i] - '0'; // Convert the character to an integer
         // Transition to the next state based on the symbol
         etatActuel = fsm->matrice_transition[etatActuel][symbole];
@@ -141,13 +142,15 @@ bool estReconnu(FiniteStateMachine* fsm, const char* mot) {
             // Invalid transition, the word is not recognized
             return false;
         }
-    
+    }
     // Check if the final state is one of the accepted states
-    for (int i = 0; i < fsm->nb_etats_accepteurs; i++) {
+    for (int i = 0; i < fsm->nombre_etats_accepteurs; i++) {
         if (etatActuel == fsm->etats_accepteurs[i]) {
             // The word is recognized
             return true;
         }
+    }
     // The word is not recognized
     return false;
 }
+
