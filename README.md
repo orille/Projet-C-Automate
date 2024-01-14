@@ -7,8 +7,8 @@ This project also marked our first experience with a group programming project. 
 For this project, it was necessary to divide the code into three distinct files: main.c, fsm.c (containing the definitions of functions), and fsm.h (its header file containing the prototypes of the fsm functions).
 
 Used links: 
-https://www.cprogramming.com/tutorial/c/lesson6.html /n
-https://www.cprogramming.com/tutorial/c/lesson7.html /n
+https://www.cprogramming.com/tutorial/c/lesson6.html
+https://www.cprogramming.com/tutorial/c/lesson7.html
 https://www.geeksforgeeks.org/bool-in-c/?ref=lbp
 https://www.geeksforgeeks.org/type-conversion-c/?ref=lbp
 https://www.geeksforgeeks.org/operators-in-c/?ref=lbp
