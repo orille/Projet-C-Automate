@@ -2,9 +2,9 @@
 // Modifier le Finite State Machine (FSM) et remplacer par Automate d'Etat Finis (AEF)
 #include <stdio.h>
 #include <stdbool.h> // bibliothèque pour booleen
-#include <string.h>
-#include "fsm.h"
-#include "fsm.c"
+#include <string.h>    // bibliothèque pour manipulation de caratères et d'allocation mémoire
+#include "fsm.h"    // on inclus le fichier .h contenant la structure de données et les prototypes
+#include "fsm.c"    // on inclus le fichier .c contenant les définitions de toutes les fonctions utilisées
 
 int main() {   // interface utilisateur via la console pour qu'il détermine son choix entre saisir manuellement la FSM ou l'importer à partir d'un fichier texte
     int choix;
@@ -39,15 +39,15 @@ int main() {   // interface utilisateur via la console pour qu'il détermine son
         return 1;
     }
 
-    if (VerifComplet(fsm)) {
-        printf("L'automate est complet.\n");
-    } else {
+    if (VerifComplet(fsm)) {    //appel de la fonction pour vérifier si la fsm est complet, cette fonction retourne un booléen
+        printf("L'automate est complet.\n");    // affichage d'un message dans le cas où la fsm est complet
+    } else {    // sinon affichage d'un message pour informer l'utilisateur
         printf("L'automate n'est pas complet.\n");
-        printf("Souhaitez-vous le rendre complet ? (oui ou 0 pour non) ");
-        char answer[3];
-        scanf("%s", answer);
-        if (strcmp(answer, "oui") == 0) {
-            CompleterFSM(fsm);
+        printf("Souhaitez-vous le rendre complet ? (oui ou non) ");    // demande à l'utilisateur si il veut le compléter
+        char answer[3];    // definition d'une variable de 3 caractères
+        scanf("%s", answer);    // récupération de la réponse dans la variable char
+        if (answer == "oui") {    
+            CompleterFSM(fsm);    // appel de la fonction pour compléter la fsm dans le cas où l'utilisateur a répondu oui
             printf("Votre FSM a été complétée avec succès !\n");
             afficherFSM(fsm); // Afficher la FSM complétée
         } else {
@@ -55,19 +55,17 @@ int main() {   // interface utilisateur via la console pour qu'il détermine son
         }
     }
     
-    // Add code to verify if a word is recognized by the FSM
-    printf("Entrez un mot à vérifier : ");
-    char mot[100]; // Assuming a maximum word length of 100 characters
+    printf("Entrez un mot à vérifier : ");    // demande à l'utilisateur d'entrer un mot pour voir si la fsm le reconnait
+    char mot[100]; // définition de la variable de 100 caractères max pour le mot à vérifier
     scanf("%s", mot);
     
-    if (estReconnu(fsm, mot)) {
-        printf("Le mot est reconnu par la FSM.\n");
+    if (estReconnu(fsm, mot)) {    // appel fonction pour reconnaitre le mot
+        printf("Le mot est reconnu par la FSM.\n");    // message succès
     } else {
-        printf("Le mot n'est pas reconnu par la FSM.\n");
+        printf("Le mot n'est pas reconnu par la FSM.\n");    // message erreur
     }
 
-    // Placer la suppression de la FSM ici, après toutes les interactions utilisateur
-    supprFSM(fsm);
+    supprFSM(fsm); // suppression de la dsl après toutes les modifications réalisées par l'utilisateur
 
 return 0; }
 
